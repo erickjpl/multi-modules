@@ -1,6 +1,6 @@
 <template>
     <v-row>
-        <v-col v-for="card in cards" :key="card.id" :cols="card.flex" class="hidden-sm-and-down">
+        <v-col v-for="card in cards" :key="card.id" :cols="card.flex">
             <v-card class="d-inline-block mx-auto">
                 <v-container>
                     <v-row>
@@ -8,16 +8,16 @@
                             <v-img max-width="250" :src="card.src" />
                         </v-col>
 
-                        <v-col col="auto" class="pl-0">
-                            <v-card-title v-text="card.product" />
-                            <v-card-subtitle class="pb-0" v-text="card.category" />
-                            <v-card-subtitle>{{ card.description | shorten-text }}</v-card-subtitle>
+                        <v-col col="auto" class="px-0">
+                            <v-card-title class="px-0" v-text="card.product" />
+                            <v-card-subtitle class="pb-0 px-0" v-text="card.category" />
+                            <v-card-subtitle class="px-0 text-justify">{{ card.description | shorten-text }}</v-card-subtitle>
                         </v-col>
 
                         <v-divider class="mx-4" vertical></v-divider>
 
                         <v-col cols="3" class="pl-0">
-                            <v-card-text>
+                            <v-card-text class="px-0">
                                 <v-row class="flex-row-reverse">
                                     <v-btn icon class="pt-0">
                                         <v-icon>mdi-heart</v-icon>
@@ -32,9 +32,9 @@
                                         {{ card.star }} ({{ card.sales }})
                                     </div>
 
-                                    <v-row align="center" justify="center">
-                                        <div class="grey--text">Ultima venta: {{ card.sale_date }}</div>
-                                    </v-row>
+                                    <break />
+
+                                    <div class="grey--text">Ultima venta: {{ card.sale_date }}</div>
                                 </v-row>
 
                                 <v-card-actions class="justify-center">
@@ -59,6 +59,6 @@
                 type: Array,
                 required: true
             }
-        }   
+        }
     }
 </script>
