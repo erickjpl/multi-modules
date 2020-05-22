@@ -85,6 +85,7 @@ class Inventory extends Model
 
     public $fillable = [
         'quantity',
+        'promotion',
         'discount',
         'price',
         'status',
@@ -100,8 +101,9 @@ class Inventory extends Model
     protected $casts = [
         'id' => 'integer',
         'quantity' => 'integer',
-        'discount' => 'float',
-        'price' => 'float',
+        'promotion' => 'integer',
+        'discount' => 'float(10,2)',
+        'price' => 'float(10,2)',
         'status' => 'string',
         'observation' => 'string',
         'product_id' => 'integer'

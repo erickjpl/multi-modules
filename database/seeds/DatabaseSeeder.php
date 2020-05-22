@@ -55,9 +55,10 @@ class DatabaseSeeder extends Seeder
         factory(Inventory::class, 181)->create();
         factory(User::class, 29)->create()->each(function ($user) {
             $user->assignRoles('guest');
+            $user->customers()->save( factory(Customer::class)->make() );
         });
-        factory(Customer::class, 29)->create();
-        factory(Billing::class, 246)->create();
-        factory(BillingDetail::class, 628)->create();
+        factory(Billing::class, 246)->create()->each(function ($order) {
+            $order->billingDetails()->saveMany( factory(BillingDetail::class, rand(1, 29))->make() );
+        });
     }
 }

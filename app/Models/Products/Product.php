@@ -97,7 +97,6 @@ class Product extends Model
      */
     public static $rules = [
         'product' => 'required',
-        'slug' => 'required',
         'description' => 'required',
         'category_id' => 'required'
     ];

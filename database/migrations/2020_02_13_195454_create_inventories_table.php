@@ -16,8 +16,9 @@ class CreateInventoriesTable extends Migration
         Schema::create('inventories', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('quantity')->unsigned();
-            $table->double('discount', 10, 2)->nullable();
-            $table->double('price', 10, 2);
+            $table->integer('promotion')->nullable();
+            $table->float('discount', 10, 2)->nullable();
+            $table->float('price', 10, 2);
             $table->enum('status', ['disponible', 'no disponible']);
             $table->longText('observation');
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();

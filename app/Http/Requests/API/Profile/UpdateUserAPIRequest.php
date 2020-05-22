@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\API\Profile;
 
+use Illuminate\Support\Arr;
 use App\Models\Profile\User;
 use InfyOm\Generator\Request\APIRequest;
 
@@ -26,6 +27,6 @@ class UpdateUserAPIRequest extends APIRequest
     {
         $rules = User::$rules;
         
-        return $rules;
+        return Arr::only($rules, array('name', 'email'));
     }
 }

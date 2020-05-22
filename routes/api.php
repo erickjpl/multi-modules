@@ -19,35 +19,37 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-// Perfil de usuarios
-Route::group(['namespace' => 'Profile','prefix' => 'profile'], function () {
-    Route::resource('users', 'UserAPIController');
+// Perfil
+Route::group(['prefix' => 'profiles'], function () {
+    // Usuario
+    Route::resource('users', 'Profile\UserAPIController')->except(['create', 'edit']);
+    
+    // Clientes
+    Route::resource('customers', 'Customers\CustomerAPIController')->except(['create', 'edit']);
 });
-
 
 // Productos y su configuracion
 Route::group(['namespace' => 'Products', 'prefix' => 'products'], function () { 
+    // Categorias
     Route::group(['namespace' => 'Config', 'prefix' => 'config'], function () {
-        Route::resource('categories', 'CategoryAPIController');
+        Route::resource('categories', 'CategoryAPIController')->except(['create', 'edit']);
     });
 
-    Route::resource('products', 'ProductAPIController');
+    // Productos
+    Route::resource('products', 'ProductAPIController')->except(['create', 'edit']);
     
+    // Inventarios del producto
     Route::group(['namespace' => 'Sales', 'prefix' => 'sales'], function () {
-        Route::resource('inventories', 'InventoryAPIController');
+        Route::resource('inventories', 'InventoryAPIController')->except(['create', 'edit']);
     });
-});
-
-
-// Clientes
-Route::group(['namespace' => 'Customers', 'prefix' => 'customers'], function () {
-    Route::resource('customers', 'CustomerAPIController');
 });
 
 
 // Ordenes de compras
 Route::group(['namespace' => 'Billings', 'prefix' => 'billings'], function () {
-    Route::resource('billings', 'BillingAPIController');
-
-    Route::resource('billing_details', 'BillingDetailAPIController');
+    Route::resource('orders', 'BillingAPIController')->except(['create', 'edit']);
+    
+    Route::group(['prefix' => 'orders'], function () {
+        Route::resource('details', 'BillingDetailAPIController')->except(['create', 'edit']);
+    });
 });

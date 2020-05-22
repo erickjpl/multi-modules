@@ -107,16 +107,26 @@ class User extends Authenticatable
      * @var array
      */
     public static $rules = [
-        'name' => 'required',
-        'email' => 'required',
+        'name' => 'required|unique:users,name',
+        'email' => 'required|unique:users,email',
         'password' => 'required'
     ];
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
     public function customers()
     {
-        return $this->hasMany(\App\Models\Profile\Customer::class, 'user_id');
+        return $this->hasMany(\App\Models\Customers\Customer::class, 'user_id');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\API\Customers;
 
+use Illuminate\Support\Arr;
 use App\Models\Customers\Customer;
 use InfyOm\Generator\Request\APIRequest;
 
@@ -26,6 +27,6 @@ class UpdateCustomerAPIRequest extends APIRequest
     {
         $rules = Customer::$rules;
         
-        return $rules;
+        return Arr::except($rules, array('dni'));
     }
 }

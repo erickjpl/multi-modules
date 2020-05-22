@@ -92,7 +92,6 @@ class Customer extends Model
         'lastname',
         'dni',
         'phone',
-        'email',
         'address',
         'user_id'
     ];
@@ -108,7 +107,6 @@ class Customer extends Model
         'lastname' => 'string',
         'dni' => 'integer',
         'phone' => 'integer',
-        'email' => 'string',
         'address' => 'string',
         'user_id' => 'integer'
     ];
@@ -121,9 +119,8 @@ class Customer extends Model
     public static $rules = [
         'name' => 'required',
         'lastname' => 'required',
-        'dni' => 'required',
+        'dni' => 'required|unique:customers,dni',
         'phone' => 'required',
-        'email' => 'required',
         'address' => 'required',
         'user_id' => 'required'
     ];

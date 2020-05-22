@@ -41,4 +41,13 @@ class UserRepository extends BaseRepository
     {
         return User::class;
     }
+
+    /**
+     * Return relations
+     **/
+    public function relations($id)
+    {
+        return $this->model->with(['customers'])->find($id);
+    }
+
 }

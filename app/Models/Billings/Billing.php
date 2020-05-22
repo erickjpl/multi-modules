@@ -107,7 +107,7 @@ class Billing extends Model
      **/
     public function customer()
     {
-        return $this->belongsTo(\App\Models\Billings\Customer::class, 'customer_id');
+        return $this->belongsTo(\App\Models\Customers\Customer::class, 'customer_id');
     }
 
     /**

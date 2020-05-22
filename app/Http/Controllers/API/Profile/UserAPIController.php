@@ -127,7 +127,7 @@ class UserAPIController extends AppBaseController
     }
 
     /**
-     * @param int $id
+     * @param string $name
      * @return Response
      *
      * @SWG\Get(
@@ -137,9 +137,9 @@ class UserAPIController extends AppBaseController
      *      description="Get User",
      *      produces={"application/json"},
      *      @SWG\Parameter(
-     *          name="id",
-     *          description="id of User",
-     *          type="integer",
+     *          name="name",
+     *          description="neme of User",
+     *          type="string",
      *          required=true,
      *          in="path"
      *      ),
@@ -164,16 +164,16 @@ class UserAPIController extends AppBaseController
      *      )
      * )
      */
-    public function show($id)
+    public function show(User $user)
     {
         try {
             /** @var User $user */
-            $user = $this->userRepository->find($id);
-                    
-            if ( empty($user) ) 
+            $repository = $this->userRepository->relations($user->id);
+
+            if ( empty($repository) ) 
                 return response()->json(array('info' => 'Usuario no encontrado.', 'status' => '204'));
 
-            return response()->json($user->toArray(), 200);
+            return response()->json($repository->toArray(), 200);
         } catch (Illuminate\Database\QueryException $e) {
             return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }

@@ -89,7 +89,6 @@ class Category extends Model
      */
     public static $rules = [
         'category' => 'required',
-        'slug' => 'required',
         'description' => 'required'
     ];
 
