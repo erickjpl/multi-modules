@@ -14,19 +14,12 @@ class CreateBillingDetailsTable extends Migration
     public function up()
     {
         Schema::create('billing_details', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('quantity')->unsigned();
             $table->double('tax', 10, 2)->unsigned();
             $table->double('price', 10, 2)->unsigned();
-            $table->bigInteger('promotion_id')->unsigned()->nullable();
-            $table->bigInteger('billing_id')->unsigned();
-            
-            $table->foreign('promotion_id')->references('id')->on('promotions')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-            $table->foreign('billing_id')->references('id')->on('billings')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+            $table->bigInteger('discount')->unsigned()->nullable();
+            $table->foreignId('billing_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

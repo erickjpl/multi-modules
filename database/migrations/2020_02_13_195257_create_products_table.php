@@ -14,28 +14,11 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('product');
             $table->string('slug')->unique();
             $table->string('description');
-            $table->bigInteger('category_id')->unsigned();
-            $table->bigInteger('brand_id')->unsigned();
-            $table->bigInteger('product_type_id')->unsigned();
-            $table->bigInteger('supplier_id')->unsigned();
-
-            $table->foreign('category_id')->references('id')->on('categories')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-            $table->foreign('brand_id')->references('id')->on('brands')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-            $table->foreign('product_type_id')->references('id')->on('product_types')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-            $table->foreign('supplier_id')->references('id')->on('suppliers')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

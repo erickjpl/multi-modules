@@ -14,21 +14,11 @@ class CreateBillingsTable extends Migration
     public function up()
     {
         Schema::create('billings', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->enum('way_paying', ['efectivo', 'cheque', 'tarjeta de credito', 'nota de credito', 'cupon']);
-            $table->bigInteger('employee_id')->unsigned();
-            $table->bigInteger('customer_id')->unsigned();
-            $table->bigInteger('promotion_id')->unsigned()->nullable();
-            
-            $table->foreign('employee_id')->references('id')->on('employees')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-            $table->foreign('customer_id')->references('id')->on('customers')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-            $table->foreign('promotion_id')->references('id')->on('promotions')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+            $table->enum('withdraw_order', ['delibery', 'en tienda']);
+            $table->enum('status', ['pendiente', 'en proceso', 'enviada', 'retirada', 'recibida', 'no procesada']);
+            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });
