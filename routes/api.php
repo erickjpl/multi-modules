@@ -19,36 +19,35 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::group(['prefix' => 'profile'], function () {
-    Route::resource('users', 'Profile\UserAPIController');
+// Perfil de usuarios
+Route::group(['namespace' => 'Profile','prefix' => 'profile'], function () {
+    Route::resource('users', 'UserAPIController');
 });
 
 
-Route::group(['prefix' => 'products.config'], function () {
-    Route::resource('categories', 'Products\Config\CategoryAPIController');
+// Productos y su configuracion
+Route::group(['namespace' => 'Products', 'prefix' => 'products'], function () { 
+    Route::group(['namespace' => 'Config', 'prefix' => 'config'], function () {
+        Route::resource('categories', 'CategoryAPIController');
+    });
+
+    Route::resource('products', 'ProductAPIController');
+    
+    Route::group(['namespace' => 'Sales', 'prefix' => 'sales'], function () {
+        Route::resource('inventories', 'InventoryAPIController');
+    });
 });
 
 
-Route::group(['prefix' => 'products'], function () {
-    Route::resource('products', 'Products\ProductAPIController');
+// Clientes
+Route::group(['namespace' => 'Customers', 'prefix' => 'customers'], function () {
+    Route::resource('customers', 'CustomerAPIController');
 });
 
 
-Route::group(['prefix' => 'products.sales'], function () {
-    Route::resource('inventories', 'Products\Sales\InventoryAPIController');
-});
+// Ordenes de compras
+Route::group(['namespace' => 'Billings', 'prefix' => 'billings'], function () {
+    Route::resource('billings', 'BillingAPIController');
 
-
-Route::group(['prefix' => 'customers'], function () {
-    Route::resource('customers', 'Customers\CustomerAPIController');
-});
-
-
-Route::group(['prefix' => 'billings'], function () {
-    Route::resource('billings', 'Billings\BillingAPIController');
-});
-
-
-Route::group(['prefix' => 'billings'], function () {
-    Route::resource('billing_details', 'Billings\BillingDetailAPIController');
+    Route::resource('billing_details', 'BillingDetailAPIController');
 });

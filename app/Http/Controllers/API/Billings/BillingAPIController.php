@@ -59,13 +59,20 @@ class BillingAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $billings = $this->billingRepository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
+        try {
+            $billings = $this->billingRepository->all(
+                $request->except(['skip', 'limit']),
+                $request->get('skip'),
+                $request->get('limit')
+            );
 
-        return $this->sendResponse($billings->toArray(), 'Billings retrieved successfully');
+            if ( ! empty($billings) ) 
+                return response()->json($billings->toArray(), 200);
+
+            return response()->json(array('info' => 'No se encontraron datos.', 'status' => '204'));
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
+        }
     }
 
     /**
@@ -109,10 +116,14 @@ class BillingAPIController extends AppBaseController
     public function store(CreateBillingAPIRequest $request)
     {
         $input = $request->all();
+        
+        try {
+            $billing = $this->billingRepository->create($input);
 
-        $billing = $this->billingRepository->create($input);
-
-        return $this->sendResponse($billing->toArray(), 'Billing saved successfully');
+            return response()->json($billing->toArray(), 201);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
+        }
     }
 
     /**
@@ -155,14 +166,17 @@ class BillingAPIController extends AppBaseController
      */
     public function show($id)
     {
-        /** @var Billing $billing */
-        $billing = $this->billingRepository->find($id);
+        try {
+            /** @var Billing $billing */
+            $billing = $this->billingRepository->find($id);
+                    
+            if ( empty($billing) ) 
+                return response()->json(array('info' => 'Factura no encontrada.', 'status' => '204'));
 
-        if (empty($billing)) {
-            return $this->sendError('Billing not found');
+            return response()->json($billing->toArray(), 200);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
-
-        return $this->sendResponse($billing->toArray(), 'Billing retrieved successfully');
     }
 
     /**
@@ -215,16 +229,19 @@ class BillingAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        /** @var Billing $billing */
-        $billing = $this->billingRepository->find($id);
+        try {
+            /** @var Billing $billing */
+            $billing = $this->billingRepository->find($id);
 
-        if (empty($billing)) {
-            return $this->sendError('Billing not found');
+            if (empty($billing))
+                return response()->json(array('info' => 'La factura no puede ser actualizada.', 'status' => '204'));
+
+            $billing = $this->billingRepository->update($input, $id);
+
+            return response()->json($billing->toArray(), 201);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
-
-        $billing = $this->billingRepository->update($input, $id);
-
-        return $this->sendResponse($billing->toArray(), 'Billing updated successfully');
     }
 
     /**
@@ -267,15 +284,18 @@ class BillingAPIController extends AppBaseController
      */
     public function destroy($id)
     {
-        /** @var Billing $billing */
-        $billing = $this->billingRepository->find($id);
+        try {
+            /** @var Billing $billing */
+            $billing = $this->billingRepository->find($id);
 
-        if (empty($billing)) {
-            return $this->sendError('Billing not found');
+            if (empty($billing))
+                return response()->json(array('info' => 'La factura no puede ser eliminada.', 'status' => '204'));
+
+            $billing->delete();
+
+            return response()->json($billing->toArray(), 202);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
-
-        $billing->delete();
-
-        return $this->sendSuccess('Billing deleted successfully');
     }
 }

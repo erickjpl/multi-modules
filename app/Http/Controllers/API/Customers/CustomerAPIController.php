@@ -59,13 +59,20 @@ class CustomerAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $customers = $this->customerRepository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
+        try {
+            $customers = $this->customerRepository->all(
+                $request->except(['skip', 'limit']),
+                $request->get('skip'),
+                $request->get('limit')
+            );
 
-        return $this->sendResponse($customers->toArray(), 'Customers retrieved successfully');
+            if ( ! empty($customers) ) 
+                return response()->json($customers->toArray(), 200);
+
+            return response()->json(array('info' => 'No se encontraron datos.', 'status' => '204'));
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
+        }
     }
 
     /**
@@ -109,10 +116,14 @@ class CustomerAPIController extends AppBaseController
     public function store(CreateCustomerAPIRequest $request)
     {
         $input = $request->all();
+        
+        try {
+            $customer = $this->customerRepository->create($input);
 
-        $customer = $this->customerRepository->create($input);
-
-        return $this->sendResponse($customer->toArray(), 'Customer saved successfully');
+            return response()->json($customer->toArray(), 201);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
+        }
     }
 
     /**
@@ -155,14 +166,17 @@ class CustomerAPIController extends AppBaseController
      */
     public function show($id)
     {
-        /** @var Customer $customer */
-        $customer = $this->customerRepository->find($id);
+        try {
+            /** @var Customer $customer */
+            $customer = $this->customerRepository->find($id);
+                
+            if ( empty($customer) ) 
+                return response()->json(array('info' => 'Cliente no encontrado.', 'status' => '204'));
 
-        if (empty($customer)) {
-            return $this->sendError('Customer not found');
+            return response()->json($customer->toArray(), 200);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
-
-        return $this->sendResponse($customer->toArray(), 'Customer retrieved successfully');
     }
 
     /**
@@ -214,17 +228,20 @@ class CustomerAPIController extends AppBaseController
     public function update($id, UpdateCustomerAPIRequest $request)
     {
         $input = $request->all();
+        
+        try {
+            /** @var Customer $customer */
+            $customer = $this->customerRepository->find($id);
 
-        /** @var Customer $customer */
-        $customer = $this->customerRepository->find($id);
+            if (empty($customer))
+                return response()->json(array('info' => 'El cliente no puede ser actualizado.', 'status' => '204'));
 
-        if (empty($customer)) {
-            return $this->sendError('Customer not found');
+            $customer = $this->customerRepository->update($input, $id);
+
+            return response()->json($customer->toArray(), 201);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
-
-        $customer = $this->customerRepository->update($input, $id);
-
-        return $this->sendResponse($customer->toArray(), 'Customer updated successfully');
     }
 
     /**
@@ -267,15 +284,18 @@ class CustomerAPIController extends AppBaseController
      */
     public function destroy($id)
     {
-        /** @var Customer $customer */
-        $customer = $this->customerRepository->find($id);
+        try {
+            /** @var Customer $customer */
+            $customer = $this->customerRepository->find($id);
 
-        if (empty($customer)) {
-            return $this->sendError('Customer not found');
+            if (empty($customer))
+                return response()->json(array('info' => 'El cliente no puede ser eliminado.', 'status' => '204'));
+
+            $customer->delete();
+
+            return response()->json($product->toArray(), 202);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
-
-        $customer->delete();
-
-        return $this->sendSuccess('Customer deleted successfully');
     }
 }

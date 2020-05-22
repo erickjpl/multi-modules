@@ -59,13 +59,20 @@ class UserAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $users = $this->userRepository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
+        try {
+            $users = $this->userRepository->all(
+                $request->except(['skip', 'limit']),
+                $request->get('skip'),
+                $request->get('limit')
+            );
 
-        return $this->sendResponse($users->toArray(), 'Users retrieved successfully');
+            if ( ! empty($users) ) 
+                return response()->json($users->toArray(), 200);
+
+            return response()->json(array('info' => 'No se encontraron datos.', 'status' => '204'));
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
+        }
     }
 
     /**
@@ -110,9 +117,13 @@ class UserAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $user = $this->userRepository->create($input);
+        try { 
+            $user = $this->userRepository->create($input);
 
-        return $this->sendResponse($user->toArray(), 'User saved successfully');
+            return response()->json($user->toArray(), 201);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
+        }
     }
 
     /**
@@ -155,14 +166,17 @@ class UserAPIController extends AppBaseController
      */
     public function show($id)
     {
-        /** @var User $user */
-        $user = $this->userRepository->find($id);
+        try {
+            /** @var User $user */
+            $user = $this->userRepository->find($id);
+                    
+            if ( empty($user) ) 
+                return response()->json(array('info' => 'Usuario no encontrado.', 'status' => '204'));
 
-        if (empty($user)) {
-            return $this->sendError('User not found');
+            return response()->json($user->toArray(), 200);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
-
-        return $this->sendResponse($user->toArray(), 'User retrieved successfully');
     }
 
     /**
@@ -214,17 +228,20 @@ class UserAPIController extends AppBaseController
     public function update($id, UpdateUserAPIRequest $request)
     {
         $input = $request->all();
+        
+        try {
+            /** @var User $user */
+            $user = $this->userRepository->find($id);
 
-        /** @var User $user */
-        $user = $this->userRepository->find($id);
+            if (empty($user)) 
+                return response()->json(array('info' => 'El cliente no puede ser actualizado.', 'status' => '204'));
 
-        if (empty($user)) {
-            return $this->sendError('User not found');
+            $user = $this->userRepository->update($input, $id);
+
+            return response()->json($user->toArray(), 201);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
-
-        $user = $this->userRepository->update($input, $id);
-
-        return $this->sendResponse($user->toArray(), 'User updated successfully');
     }
 
     /**
@@ -267,15 +284,18 @@ class UserAPIController extends AppBaseController
      */
     public function destroy($id)
     {
-        /** @var User $user */
-        $user = $this->userRepository->find($id);
+        try {
+            /** @var User $user */
+            $user = $this->userRepository->find($id);
 
-        if (empty($user)) {
-            return $this->sendError('User not found');
+            if ( empty($user) )
+                return response()->json(array('info' => 'El usuario no puede ser eliminado.', 'status' => '204'));
+
+            $user->delete();
+
+            return response()->json($user->toArray(), 202);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
-
-        $user->delete();
-
-        return $this->sendSuccess('User deleted successfully');
     }
 }

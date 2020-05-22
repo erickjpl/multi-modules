@@ -59,13 +59,20 @@ class ProductAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $products = $this->productRepository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
+        try {
+            $products = $this->productRepository->all(
+                $request->except(['skip', 'limit']),
+                $request->get('skip'),
+                $request->get('limit')
+            );
 
-        return $this->sendResponse($products->toArray(), 'Products retrieved successfully');
+            if ( ! empty($products) ) 
+                return response()->json($products->toArray(), 200);
+
+            return response()->json(array('info' => 'No se encontraron datos.', 'status' => '204'));
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
+        }
     }
 
     /**
@@ -109,10 +116,14 @@ class ProductAPIController extends AppBaseController
     public function store(CreateProductAPIRequest $request)
     {
         $input = $request->all();
+        
+        try{
+            $product = $this->productRepository->create($input);
 
-        $product = $this->productRepository->create($input);
-
-        return $this->sendResponse($product->toArray(), 'Product saved successfully');
+            return response()->json($product->toArray(), 201);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
+        }
     }
 
     /**
@@ -155,14 +166,17 @@ class ProductAPIController extends AppBaseController
      */
     public function show($id)
     {
-        /** @var Product $product */
-        $product = $this->productRepository->find($id);
+        try {
+            /** @var Product $product */
+            $product = $this->productRepository->find($id);
+            
+            if ( empty($product) ) 
+                return response()->json(array('info' => 'Producto no encontrado.', 'status' => '204'));
 
-        if (empty($product)) {
-            return $this->sendError('Product not found');
+            return response()->json($product->toArray(), 200);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
-
-        return $this->sendResponse($product->toArray(), 'Product retrieved successfully');
     }
 
     /**
@@ -213,18 +227,21 @@ class ProductAPIController extends AppBaseController
      */
     public function update($id, UpdateProductAPIRequest $request)
     {
-        $input = $request->all();
+        try{
+            $input = $request->all();
 
-        /** @var Product $product */
-        $product = $this->productRepository->find($id);
+            /** @var Product $product */
+            $product = $this->productRepository->find($id);
 
-        if (empty($product)) {
-            return $this->sendError('Product not found');
+            if ( empty($product) )
+                return response()->json(array('info' => 'El producto no puede ser actualizado.', 'status' => '204'));
+
+            $product = $this->productRepository->update($input, $id);
+
+            return response()->json($product->toArray(), 201);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
-
-        $product = $this->productRepository->update($input, $id);
-
-        return $this->sendResponse($product->toArray(), 'Product updated successfully');
     }
 
     /**
@@ -267,15 +284,18 @@ class ProductAPIController extends AppBaseController
      */
     public function destroy($id)
     {
-        /** @var Product $product */
-        $product = $this->productRepository->find($id);
+        try {
+            /** @var Product $product */
+            $product = $this->productRepository->find($id);
 
-        if (empty($product)) {
-            return $this->sendError('Product not found');
+            if ( empty($product) ) 
+                return response()->json(array('info' => 'El producto no puede ser eliminado.', 'status' => '204'));
+
+            $product->delete();
+
+            return response()->json($product->toArray(), 202);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
-
-        $product->delete();
-
-        return $this->sendSuccess('Product deleted successfully');
     }
 }

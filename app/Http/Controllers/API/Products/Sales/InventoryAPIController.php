@@ -59,13 +59,20 @@ class InventoryAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $inventories = $this->inventoryRepository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
+        try {
+            $inventories = $this->inventoryRepository->all(
+                $request->except(['skip', 'limit']),
+                $request->get('skip'),
+                $request->get('limit')
+            );
 
-        return $this->sendResponse($inventories->toArray(), 'Inventories retrieved successfully');
+            if ( ! empty($inventories) ) 
+                return response()->json($inventories->toArray(), 200);
+
+            return response()->json(array('info' => 'No se encontraron datos.', 'status' => '204'));
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
+        }
     }
 
     /**
@@ -110,9 +117,13 @@ class InventoryAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $inventory = $this->inventoryRepository->create($input);
+        try {
+            $inventory = $this->inventoryRepository->create($input);
 
-        return $this->sendResponse($inventory->toArray(), 'Inventory saved successfully');
+            return response()->json($inventory->toArray(), 201);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
+        }
     }
 
     /**
@@ -155,14 +166,17 @@ class InventoryAPIController extends AppBaseController
      */
     public function show($id)
     {
-        /** @var Inventory $inventory */
-        $inventory = $this->inventoryRepository->find($id);
+        try {
+            /** @var Inventory $inventory */
+            $inventory = $this->inventoryRepository->find($id);
+            
+            if ( empty($inventory) ) 
+                return response()->json(array('info' => 'Inventario no encontrado.', 'status' => '204'));
 
-        if (empty($inventory)) {
-            return $this->sendError('Inventory not found');
+            return response()->json($inventory->toArray(), 200);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
-
-        return $this->sendResponse($inventory->toArray(), 'Inventory retrieved successfully');
     }
 
     /**
@@ -213,18 +227,21 @@ class InventoryAPIController extends AppBaseController
      */
     public function update($id, UpdateInventoryAPIRequest $request)
     {
-        $input = $request->all();
+        try {
+            $input = $request->all();
 
-        /** @var Inventory $inventory */
-        $inventory = $this->inventoryRepository->find($id);
+            /** @var Inventory $inventory */
+            $inventory = $this->inventoryRepository->find($id);
 
-        if (empty($inventory)) {
-            return $this->sendError('Inventory not found');
+            if (empty($inventory)) 
+                return response()->json(array('info' => 'El inventario no puede ser actualizado.', 'status' => '204'));            
+
+            $inventory = $this->inventoryRepository->update($input, $id);
+
+            return response()->json($inventory->toArray(), 201);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
-
-        $inventory = $this->inventoryRepository->update($input, $id);
-
-        return $this->sendResponse($inventory->toArray(), 'Inventory updated successfully');
     }
 
     /**
@@ -267,15 +284,18 @@ class InventoryAPIController extends AppBaseController
      */
     public function destroy($id)
     {
-        /** @var Inventory $inventory */
-        $inventory = $this->inventoryRepository->find($id);
+        try {
+            /** @var Inventory $inventory */
+            $inventory = $this->inventoryRepository->find($id);
 
-        if (empty($inventory)) {
-            return $this->sendError('Inventory not found');
+            if (empty($inventory))
+                return response()->json(array('info' => 'El inventario no puede ser eliminado.', 'status' => '204'));
+
+            $inventory->delete();
+
+            return response()->json($inventory->toArray(), 202);
+        } catch (Illuminate\Database\QueryException $e) {
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
-
-        $inventory->delete();
-
-        return $this->sendSuccess('Inventory deleted successfully');
     }
 }

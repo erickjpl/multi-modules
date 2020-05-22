@@ -66,9 +66,12 @@ class CategoryAPIController extends AppBaseController
                 $request->get('limit')
             );
 
-            return $this->sendResponse($categories->toArray(), 'Categories retrieved successfully');
+            if ( ! empty($categories) ) 
+                return response()->json($categories->toArray(), 200);
+
+            return response()->json(array('info' => 'No se encontraron datos.', 'status' => '204'));
         } catch (Illuminate\Database\QueryException $e) {
-            return response()->json('Ha ocurrido un error con la base de datos', 500);
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
     }
 
@@ -117,9 +120,9 @@ class CategoryAPIController extends AppBaseController
         try {
             $category = $this->categoryRepository->create($input);
 
-            return $this->sendResponse($category->toArray(), 'Category saved successfully');
+            return response()->json($category->toArray(), 201);
         } catch (Illuminate\Database\QueryException $e) {
-            return response()->json('Ha ocurrido un error con la base de datos', 500);
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
     }
 
@@ -167,13 +170,12 @@ class CategoryAPIController extends AppBaseController
             /** @var Category $category */
             $category = $this->categoryRepository->find($id);
 
-            if (empty($category)) {
-                return $this->sendError('Category not found');
-            }
+            if ( empty($category) ) 
+                return response()->json(array('info' => 'Categoria no encontrada.', 'status' => '204'));
 
-            return $this->sendResponse($category->toArray(), 'Category retrieved successfully');
+            return response()->json($category->toArray(), 200);
         } catch (Illuminate\Database\QueryException $e) {
-            return response()->json('Ha ocurrido un error con la base de datos', 500);
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
     }
 
@@ -225,21 +227,20 @@ class CategoryAPIController extends AppBaseController
      */
     public function update($id, UpdateCategoryAPIRequest $request)
     {
-        try {
-            $input = $request->all();
+        $input = $request->all();
 
+        try {
             /** @var Category $category */
             $category = $this->categoryRepository->find($id);
 
-            if (empty($category)) {
-                return $this->sendError('Category not found');
-            }
+            if ( empty($category) ) 
+                return response()->json(array('info' => 'La categoria no puede ser actualizada.', 'status' => '204'));
 
             $category = $this->categoryRepository->update($input, $id);
 
-            return $this->sendResponse($category->toArray(), 'Category updated successfully');
+            return response()->json($category->toArray(), 201);
         } catch (Illuminate\Database\QueryException $e) {
-            return response()->json('Ha ocurrido un error con la base de datos', 500);
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
     }
 
@@ -287,15 +288,14 @@ class CategoryAPIController extends AppBaseController
             /** @var Category $category */
             $category = $this->categoryRepository->find($id);
 
-            if (empty($category)) {
-                return $this->sendError('Category not found');
-            }
+            if ( empty($category) ) 
+                return response()->json(array('info' => 'La categoria no puede ser eliminada.', 'status' => '204'));
 
             $category->delete();
 
-            return $this->sendSuccess('Category deleted successfully');
+            return response()->json($category->toArray(), 202);
         } catch (Illuminate\Database\QueryException $e) {
-            return response()->json('Ha ocurrido un error con la base de datos', 500);
+            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
     }
 }
