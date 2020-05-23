@@ -42,4 +42,12 @@ class InventoryRepository extends BaseRepository
     {
         return Inventory::class;
     }
+
+    /**
+     * Return relations
+     **/
+    public function relations()
+    {
+        return $this->model->with('product:id,product,slug,category_id')->paginate(100);
+    }
 }

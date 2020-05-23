@@ -40,4 +40,21 @@ class BillingRepository extends BaseRepository
     {
         return Billing::class;
     }
+
+    /**
+     * Return relations
+     **/
+    public function relations( $request = null )
+    {
+        if ( ! $request->all() ) {
+            return $this->model
+                ->withCount(['billingDetails as products'])
+                ->with(['billingDetails'])->paginate(100);
+        }
+            
+        return $this->model
+            ->where('customer_id', $request->customer_id)
+            ->withCount(['billingDetails as products'])
+            ->with(['billingDetails'])->paginate(100);
+    }
 }

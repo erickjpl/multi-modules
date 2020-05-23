@@ -39,4 +39,12 @@ class CategoryRepository extends BaseRepository
     {
         return Category::class;
     }
+
+    /**
+     * Return relations
+     **/
+    public function relations()
+    {            
+        return $this->model->with('image')->paginate(100);
+    }
 }

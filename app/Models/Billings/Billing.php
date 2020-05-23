@@ -87,7 +87,8 @@ class Billing extends Model
         'way_paying' => 'string',
         'withdraw_order' => 'string',
         'status' => 'string',
-        'customer_id' => 'integer'
+        'customer_id' => 'integer',
+        'created_at' => 'datetime:d/m/Y'
     ];
 
     /**
@@ -100,6 +101,14 @@ class Billing extends Model
         'withdraw_order' => 'required',
         'status' => 'required',
         'customer_id' => 'required'
+    ];
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'updated_at', 'deleted_at'
     ];
 
     /**

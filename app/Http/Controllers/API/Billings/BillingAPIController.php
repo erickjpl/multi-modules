@@ -60,14 +60,10 @@ class BillingAPIController extends AppBaseController
     public function index(Request $request)
     {
         try {
-            $billings = $this->billingRepository->all(
-                $request->except(['skip', 'limit']),
-                $request->get('skip'),
-                $request->get('limit')
-            );
+            $billings = $this->billingRepository->relations($request);
 
             if ( ! empty($billings) ) 
-                return response()->json($billings->toArray(), 200);
+                return response()->json($billings, 200);
 
             return response()->json(array('info' => 'No se encontraron datos.', 'status' => '204'));
         } catch (Illuminate\Database\QueryException $e) {
@@ -164,11 +160,11 @@ class BillingAPIController extends AppBaseController
      *      )
      * )
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         try {
             /** @var Billing $billing */
-            $billing = $this->billingRepository->find($id);
+            $billing = $this->billingRepository->relations($request)->find($id);
                     
             if ( empty($billing) ) 
                 return response()->json(array('info' => 'Factura no encontrada.', 'status' => '204'));

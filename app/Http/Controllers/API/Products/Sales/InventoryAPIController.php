@@ -60,22 +60,10 @@ class InventoryAPIController extends AppBaseController
     public function index(Request $request)
     {
         try {
-            $inventories = $this->inventoryRepository->all(
-                $request->except(['skip', 'limit']),
-                $request->get('skip'),
-                $request->get('limit')
-            );
-
-            $quantity = array();
-            foreach ($inventories->groupBy('product_id') as $key => $value) {
-                array_push( $quantity, array($key => $value->sum('quantity')) );
-            }
-
-            return response()->json($quantity, 200);
-            return response()->json($inventories->groupBy('product_id'), 200);
+            $inventories = $this->inventoryRepository->relations();
 
             if ( ! empty($inventories) ) 
-                return response()->json($inventories->toArray(), 200);
+                return response()->json($inventories, 200);
 
             return response()->json(array('info' => 'No se encontraron datos.', 'status' => '204'));
         } catch (Illuminate\Database\QueryException $e) {
@@ -176,7 +164,7 @@ class InventoryAPIController extends AppBaseController
     {
         try {
             /** @var Inventory $inventory */
-            $inventory = $this->inventoryRepository->find($id);
+            $inventory = $this->inventoryRepository->relations()->find($id);
             
             if ( empty($inventory) ) 
                 return response()->json(array('info' => 'Inventario no encontrado.', 'status' => '204'));

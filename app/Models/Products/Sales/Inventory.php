@@ -102,8 +102,8 @@ class Inventory extends Model
         'id' => 'integer',
         'quantity' => 'integer',
         'promotion' => 'integer',
-        'discount' => 'float(10,2)',
-        'price' => 'float(10,2)',
+        'discount' => 'decimal:2',
+        'price' => 'decimal:2',
         'status' => 'string',
         'observation' => 'string',
         'product_id' => 'integer'

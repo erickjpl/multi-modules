@@ -60,14 +60,14 @@ class CategoryAPIController extends AppBaseController
     public function index(Request $request)
     {
         try {
-            $categories = $this->categoryRepository->all(
+            $categories = $this->categoryRepository->relations()->all(
                 $request->except(['skip', 'limit']),
                 $request->get('skip'),
                 $request->get('limit')
             );
 
             if ( ! empty($categories) ) 
-                return response()->json($categories->toArray(), 200);
+                return response()->json($categories, 200);
 
             return response()->json(array('info' => 'No se encontraron datos.', 'status' => '204'));
         } catch (Illuminate\Database\QueryException $e) {
@@ -168,7 +168,7 @@ class CategoryAPIController extends AppBaseController
     {
         try {
             /** @var Category $category */
-            $repository = $this->categoryRepository->find($category->id);
+            $repository = $this->categoryRepository->relations()->find($category->id);
 
             if ( empty($repository) ) 
                 return response()->json(array('info' => 'Categoria no encontrada.', 'status' => '204'));

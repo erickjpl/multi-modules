@@ -60,58 +60,8 @@ class ProductAPIController extends AppBaseController
     public function index(Request $request)
     {
         try {
-            $products = $this->productRepository->all(
-                $request->except(['skip', 'limit']),
-                $request->get('skip'),
-                $request->get('limit')
-            );
-
-            if ( ! empty($products) ) 
-                return response()->json($products->toArray(), 200);
-
-            return response()->json(array('info' => 'No se encontraron datos.', 'status' => '204'));
-        } catch (Illuminate\Database\QueryException $e) {
-            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
-        }
-    }
-
-    /**
-     * @param Request $request
-     * @return Response
-     *
-     * @SWG\Get(
-     *      path="/products",
-     *      summary="Get a listing of the best selling products.",
-     *      tags={"Product"},
-     *      description="Get all Products",
-     *      produces={"application/json"},
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  type="array",
-     *                  @SWG\Items(ref="#/definitions/Product")
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
-    public function mostSelled(Request $request)
-    {
-        try {
             $products = $this->productRepository->relations( $request );
-            
+           
             if ( ! empty($products) ) 
                 return response()->json($products->toArray(), 200);
 
@@ -210,11 +160,11 @@ class ProductAPIController extends AppBaseController
      *      )
      * )
      */
-    public function show(Product $product)
+    public function show(Request $request, Product $product)
     {
         try {
             /** @var Product $product */
-            $repository = $this->productRepository->find($product->id);
+            $repository = $this->productRepository->relations($request)->find($product->id);
             
             if ( empty($repository) ) 
                 return response()->json(array('info' => 'Producto no encontrado.', 'status' => '204'));

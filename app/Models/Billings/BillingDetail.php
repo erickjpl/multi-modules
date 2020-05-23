@@ -95,8 +95,8 @@ class BillingDetail extends Model
     protected $casts = [
         'id' => 'integer',
         'quantity' => 'integer',
-        'tax' => 'float',
-        'price' => 'float',
+        'tax' => 'decimal:2',
+        'price' => 'decimal:2',
         'discount' => 'integer',
         'billing_id' => 'integer',
         'inventory_id' => 'integer'

@@ -50,12 +50,12 @@ class ProductRepository extends BaseRepository
             return $this
                 ->model
                 ->withCount(['billingDetails as most_selled'])
-                ->with(['inventories' => function ($query) {
-                    $query->selectRaw('product_id,SUM(quantity) as quantity')
-                        ->where('status', 'disponible')
+                ->with(['images', 'inventories' => function ($query) {
+                    $query->selectRaw('product_id,SUM(quantity) as quantity,price,promotion,discount')
+                        ->whereIn('status', ['in shop', 'available'])
                         ->groupBy('product_id')
                         ->orderBy('created_at', 'asc');
-                }])->get();
+                }])->paginate(100);
         }
             
         return $this
@@ -63,11 +63,11 @@ class ProductRepository extends BaseRepository
             ->where('category_id', $request->category_id)
             ->withCount(['billingDetails as most_selled'])
             // ->with(['inventories:product_id,quantity'])
-            ->with(['inventories' => function ($query) {
+            ->with(['images', 'inventories' => function ($query) {
                 $query->selectRaw('product_id,SUM(quantity) as quantity,price,promotion,discount')
                     ->whereIn('status', ['in shop', 'available'])
                     ->groupBy('product_id')
                     ->orderBy('created_at', 'asc');
-            }])->get();
+            }])->paginate(100);
     }
 }
