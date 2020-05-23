@@ -64,8 +64,8 @@ class ProductRepository extends BaseRepository
             ->withCount(['billingDetails as most_selled'])
             // ->with(['inventories:product_id,quantity'])
             ->with(['inventories' => function ($query) {
-                $query->selectRaw('product_id,SUM(quantity) as quantity')
-                    ->where('status', 'disponible')
+                $query->selectRaw('product_id,SUM(quantity) as quantity,price,promotion,discount')
+                    ->whereIn('status', ['in shop', 'available'])
                     ->groupBy('product_id')
                     ->orderBy('created_at', 'asc');
             }])->get();

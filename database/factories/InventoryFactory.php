@@ -15,7 +15,7 @@ $factory->define(Inventory::class, function (Faker $faker) {
         'promotion' => $promotion * 100,
         'discount' => $discount,
         'price' => $price,
-        'status' => $faker->randomElement( array('disponible', 'no disponible') ),
+        'status' => $faker->randomElement( array('in shop', 'available', 'sold out') ),
         'observation' => $faker->text(200),
         'product_id' => Product::all()->random()->id
     ];

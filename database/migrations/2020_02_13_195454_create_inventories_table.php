@@ -19,7 +19,7 @@ class CreateInventoriesTable extends Migration
             $table->integer('promotion')->nullable();
             $table->float('discount', 10, 2)->nullable();
             $table->float('price', 10, 2);
-            $table->enum('status', ['disponible', 'no disponible']);
+            $table->enum('status', ['in shop', 'available', 'sold out']);
             $table->longText('observation');
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
