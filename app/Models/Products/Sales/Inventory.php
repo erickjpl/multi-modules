@@ -136,7 +136,7 @@ class Inventory extends Model
      **/
     public function product()
     {
-        return $this->belongsTo(\App\Models\Products\Sales\Product::class, 'product_id');
+        return $this->belongsTo(\App\Models\Products\Product::class, 'product_id');
     }
 
     /**
@@ -144,6 +144,6 @@ class Inventory extends Model
      **/
     public function billingDetails()
     {
-        return $this->hasMany(\App\Models\Billings\App\Models\BillingDetail::class, 'inventory_id');
+        return $this->hasMany(\App\Models\Billings\BillingDetail::class, 'inventory_id');
     }
 }

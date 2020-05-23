@@ -46,9 +46,28 @@ class ProductRepository extends BaseRepository
      **/
     public function relations( $request = null )
     {
-        if ( ! $request->all() ) 
-            return $this->model->withCount(['billingDetails'])->get();
+        if ( ! $request->all() ) {
+            return $this
+                ->model
+                ->withCount(['billingDetails as most_selled'])
+                ->with(['inventories' => function ($query) {
+                    $query->selectRaw('product_id,SUM(quantity) as quantity')
+                        ->where('status', 'disponible')
+                        ->groupBy('product_id')
+                        ->orderBy('created_at', 'asc');
+                }])->get();
+        }
             
-        return $this->model->where('category_id', $request->category_id)->withCount(['billingDetails'])->get();
+        return $this
+            ->model
+            ->where('category_id', $request->category_id)
+            ->withCount(['billingDetails as most_selled'])
+            // ->with(['inventories:product_id,quantity'])
+            ->with(['inventories' => function ($query) {
+                $query->selectRaw('product_id,SUM(quantity) as quantity')
+                    ->where('status', 'disponible')
+                    ->groupBy('product_id')
+                    ->orderBy('created_at', 'asc');
+            }])->get();
     }
 }

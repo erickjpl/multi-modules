@@ -149,6 +149,6 @@ class Product extends Model
      **/
     public function inventories()
     {
-        return $this->hasMany(\App\Models\Products\Inventory::class, 'product_id');
+        return $this->hasMany(\App\Models\Products\Sales\Inventory::class, 'product_id');
     }
 }
