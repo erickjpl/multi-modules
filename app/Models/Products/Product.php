@@ -102,6 +102,25 @@ class Product extends Model
     ];
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'created_at', 'updated_at', 'deleted_at'
+    ];
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function images()
@@ -115,6 +134,14 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(\App\Models\Products\Category::class, 'category_id');
+    }
+
+    /**
+     * Get all of the posts for the country.
+     */
+    public function billingDetails()
+    {
+        return $this->hasManyThrough(\App\Models\Billings\BillingDetail::class, \App\Models\Products\Sales\Inventory::class, 'product_id', 'inventory_id');
     }
 
     /**

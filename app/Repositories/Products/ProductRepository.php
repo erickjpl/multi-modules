@@ -40,4 +40,15 @@ class ProductRepository extends BaseRepository
     {
         return Product::class;
     }
+
+    /**
+     * Return relations
+     **/
+    public function relations( $request = null )
+    {
+        if ( ! $request->all() ) 
+            return $this->model->withCount(['billingDetails'])->get();
+            
+        return $this->model->where('category_id', $request->category_id)->withCount(['billingDetails'])->get();
+    }
 }

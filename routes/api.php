@@ -37,6 +37,8 @@ Route::group(['namespace' => 'Products', 'prefix' => 'products'], function () {
 
     // Productos
     Route::resource('products', 'ProductAPIController')->except(['create', 'edit']);
+    // Productos mas vendidos
+    Route::get('most-selled', 'ProductAPIController@mostSelled');
     
     // Inventarios del producto
     Route::group(['namespace' => 'Sales', 'prefix' => 'sales'], function () {

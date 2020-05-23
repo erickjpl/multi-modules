@@ -14,6 +14,7 @@ $factory->define(BillingDetail::class, function (Faker $faker) {
         'tax' => round($inventory->price * 0.16, 2),
         'price' => round($inventory->price / 1.16, 2),
         'discount' => $inventory->discount,
+        'inventory_id' => $inventory->id,
         # 'billing_id' => Billing::all()->random()->id
     ];
 });

@@ -66,6 +66,14 @@ class InventoryAPIController extends AppBaseController
                 $request->get('limit')
             );
 
+            $quantity = array();
+            foreach ($inventories->groupBy('product_id') as $key => $value) {
+                array_push( $quantity, array($key => $value->sum('quantity')) );
+            }
+
+            return response()->json($quantity, 200);
+            return response()->json($inventories->groupBy('product_id'), 200);
+
             if ( ! empty($inventories) ) 
                 return response()->json($inventories->toArray(), 200);
 

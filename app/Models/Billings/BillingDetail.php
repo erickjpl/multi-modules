@@ -98,7 +98,8 @@ class BillingDetail extends Model
         'tax' => 'float',
         'price' => 'float',
         'discount' => 'integer',
-        'billing_id' => 'integer'
+        'billing_id' => 'integer',
+        'inventory_id' => 'integer'
     ];
 
     /**
@@ -110,7 +111,8 @@ class BillingDetail extends Model
         'quantity' => 'required',
         'tax' => 'required',
         'price' => 'required',
-        'billing_id' => 'required'
+        'billing_id' => 'required',
+        'inventory_id' => 'required'
     ];
 
     /**

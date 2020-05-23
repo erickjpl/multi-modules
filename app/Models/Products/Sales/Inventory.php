@@ -123,10 +123,27 @@ class Inventory extends Model
     ];
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'updated_at', 'deleted_at'
+    ];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/
     public function product()
     {
         return $this->belongsTo(\App\Models\Products\Sales\Product::class, 'product_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HaHasManys
+     **/
+    public function billingDetails()
+    {
+        return $this->hasMany(\App\Models\Billings\App\Models\BillingDetail::class, 'inventory_id');
     }
 }

@@ -20,6 +20,7 @@ class CreateBillingDetailsTable extends Migration
             $table->double('price', 10, 2)->unsigned();
             $table->bigInteger('discount')->unsigned()->nullable();
             $table->foreignId('billing_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('inventory_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -164,16 +164,16 @@ class CategoryAPIController extends AppBaseController
      *      )
      * )
      */
-    public function show($id)
+    public function show(Category $category)
     {
         try {
             /** @var Category $category */
-            $category = $this->categoryRepository->find($id);
+            $repository = $this->categoryRepository->find($category->id);
 
-            if ( empty($category) ) 
+            if ( empty($repository) ) 
                 return response()->json(array('info' => 'Categoria no encontrada.', 'status' => '204'));
 
-            return response()->json($category->toArray(), 200);
+            return response()->json($repository->toArray(), 200);
         } catch (Illuminate\Database\QueryException $e) {
             return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
@@ -225,20 +225,20 @@ class CategoryAPIController extends AppBaseController
      *      )
      * )
      */
-    public function update($id, UpdateCategoryAPIRequest $request)
+    public function update(Category $category, UpdateCategoryAPIRequest $request)
     {
         $input = $request->all();
 
         try {
             /** @var Category $category */
-            $category = $this->categoryRepository->find($id);
+            $repository = $this->categoryRepository->find($category->id);
 
-            if ( empty($category) ) 
+            if ( empty($repository) ) 
                 return response()->json(array('info' => 'La categoria no puede ser actualizada.', 'status' => '204'));
 
-            $category = $this->categoryRepository->update($input, $id);
+            $repository = $this->categoryRepository->update($input, $category->id);
 
-            return response()->json($category->toArray(), 201);
+            return response()->json($repository->toArray(), 201);
         } catch (Illuminate\Database\QueryException $e) {
             return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
@@ -282,18 +282,18 @@ class CategoryAPIController extends AppBaseController
      *      )
      * )
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
         try {
             /** @var Category $category */
-            $category = $this->categoryRepository->find($id);
+            $repository = $this->categoryRepository->find($category->id);
 
-            if ( empty($category) ) 
+            if ( empty($repository) ) 
                 return response()->json(array('info' => 'La categoria no puede ser eliminada.', 'status' => '204'));
 
-            $category->delete();
+            $repository->delete();
 
-            return response()->json($category->toArray(), 202);
+            return response()->json($repository->toArray(), 202);
         } catch (Illuminate\Database\QueryException $e) {
             return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }
