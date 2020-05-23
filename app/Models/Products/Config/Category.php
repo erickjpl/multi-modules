@@ -93,10 +93,28 @@ class Category extends Model
     ];
 
     /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function image()
+    {
+        return $this->morphOne(\App\Models\Config\Image::class, 'imageable');
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
     public function products()
     {
-        return $this->hasMany(\App\Models\Products\Config\Product::class, 'category_id');
+        return $this->hasMany(\App\Models\Products\Product::class, 'category_id');
     }
 }

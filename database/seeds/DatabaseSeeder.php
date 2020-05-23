@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Config\Image;
 use App\Models\Profile\User;
 use Illuminate\Database\Seeder;
 use App\Models\Billings\Billing;
@@ -50,12 +51,17 @@ class DatabaseSeeder extends Seeder
         
         $user->assignRoles('admin');
 
-        factory(Category::class, 18)->create();
-        factory(Product::class, 90)->create();
+        factory(Category::class, 18)->create()->each(function ($user) {
+            $user->image()->save( factory(Image::class)->make() );
+        });
+        factory(Product::class, 90)->create()->each(function ($user) {
+            $user->images()->saveMany( factory(Image::class, rand(1, 8))->make() );
+        });
         factory(Inventory::class, 181)->create();
         factory(User::class, 29)->create()->each(function ($user) {
             $user->assignRoles('guest');
-            $user->customers()->save( factory(Customer::class)->make() );
+            $user->image()->save( factory(Image::class)->make() );
+            $user->customer()->save( factory(Customer::class)->make() );
         });
         factory(Billing::class, 246)->create()->each(function ($order) {
             $order->billingDetails()->saveMany( factory(BillingDetail::class, rand(1, 29))->make() );

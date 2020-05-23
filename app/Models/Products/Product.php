@@ -102,6 +102,14 @@ class Product extends Model
     ];
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function images()
+    {
+        return $this->morphMany(\App\Models\Config\Image::class, 'imageable');
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/
     public function category()

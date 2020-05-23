@@ -130,7 +130,7 @@ class Customer extends Model
      **/
     public function user()
     {
-        return $this->belongsTo(\App\Models\Customers\User::class, 'user_id');
+        return $this->belongsTo(\App\Models\Profile\User::class, 'user_id');
     }
 
     /**

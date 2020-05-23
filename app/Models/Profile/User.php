@@ -123,10 +123,18 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
-    public function customers()
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function image()
     {
-        return $this->hasMany(\App\Models\Customers\Customer::class, 'user_id');
+        return $this->morphOne(\App\Models\Config\Image::class, 'imageable');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     **/
+    public function customer()
+    {
+        return $this->hasOne(\App\Models\Customers\Customer::class, 'user_id');
     }
 }
