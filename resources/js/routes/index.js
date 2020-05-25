@@ -12,6 +12,7 @@ const routes = [
         path: '/',
         name: 'index',
         component: Index,
+        redirect: { name: 'shop' },
         children: [
             ...Public,
             ...Dashboard
