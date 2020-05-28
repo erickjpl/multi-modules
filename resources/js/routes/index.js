@@ -12,7 +12,7 @@ const routes = [
         path: '/',
         name: 'index',
         component: Index,
-        redirect: { name: 'shop' },
+        redirect: { name: 'landing.index' },
         children: [
             ...Public,
             ...Dashboard

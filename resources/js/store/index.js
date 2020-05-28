@@ -1,6 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import products from '@/store/modules/shop/products'
+import shoppingCart from '@/store/modules/shop/shopping-cart'
+import * as actions from '@/store/modules/shop/actions'
+import * as getters from '@/store/modules/shop/getters'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -17,7 +22,10 @@ export default new Vuex.Store({
             state.drawer = payload
         },
     },
-    actions: {
-
+    actions,
+    getters,
+    modules: {
+        products,
+        shoppingCart
     },
 })
