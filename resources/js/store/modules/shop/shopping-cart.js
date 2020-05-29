@@ -1,21 +1,15 @@
 const state = {
     items: []
 }
-  
-  
+
 const mutations = {
-    ADD_TO_CART (state, productId) {
-        const found = state.items.find(
-            (product) => product.id == productId
-        )
+    ADD_TO_CART (state, id) {
+        const found = state.items.find( (p) => p.id == id )
     
         if (found)
             found.quantity++;
         else
-            state.items.push({
-                id: productId,
-                quantity: 1
-            })
+            state.items.push({ id: id, quantity: 1 })
     },
   
     REMOVE_FROM_CART (state, removedProduct) {

@@ -10,8 +10,8 @@
 </template>
 
 <script>
-    import ListBigCards from '@/components/shopping-cart/ListBigCardComponent'
-    import ListShortCards from '@/components/shopping-cart/ListShortCardComponent'
+    import ListBigCards from '@/components/shopping-cart/example/ListBigCardComponent'
+    import ListShortCards from '@/components/shopping-cart/example/ListShortCardComponent'
 
     export default {
         components: {

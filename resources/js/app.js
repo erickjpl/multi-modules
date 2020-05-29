@@ -1,16 +1,17 @@
 require('./bootstrap')
 
 import Vue from 'vue'
+import store from '@/store/index'
 import Index from '@/pages/Index'
 import router from '@/routes/index'
 import vuetify from '@/plugins/vuetify'
 import Money from '@/plugins/filters/money'
 import ShortenText from '@/plugins/filters/shorten-text'
 import GlobalComponents from '@/plugins/global/components'
-import store from '@/store/index'
-import '@/plugins/vee-validate'
-import '@/plugins/base'
+
 import '@/plugins/chartist'
+import '@/plugins/global/base'
+import '@/plugins/vee-validate'
 
 Vue.use(Money)
 Vue.use(ShortenText)

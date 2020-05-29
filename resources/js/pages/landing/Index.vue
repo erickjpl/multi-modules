@@ -1,33 +1,36 @@
 <template>
-  <v-app>
-    <NavigationTop />
+    <v-app>
+        <l-navigation-top-component />
 
-    <SearchFront />
+        <l-search-front-component :hotProducts=productsHot />
 
-    <v-content>
-      <router-view></router-view>
-    </v-content>
+        <v-content>
+            <router-view></router-view>
+        </v-content>
 
-    <Footer />
-  </v-app>
+        <l-footer-component />
+    </v-app>
 </template>
 
 <script>
-import SearchFront from '@/components/shared/search-front'
-import Footer from '@/components/shared/footer'
-import NavigationTop from '@/components/shared/navigation-top'
+    import '@/plugins/global/landing'
+    import { mapGetters, mapActions } from 'vuex'
 
-export default {
-  name: 'App',
-  components: {
-    SearchFront,
-    Footer,
-    NavigationTop
-  },
-  data () {
-    return {
-      
+    export default {
+        name: 'IndexLanding',
+        data() {
+            return {
+                hotProducts: []
+            }
+        },
+        computed: {
+            ...mapGetters('products', ['productsHot'])
+        },
+        created() {
+            this.getAllProducts()
+        },
+        methods: {
+            ...mapActions('products', ['getAllProducts'])
+        }
     }
-  }
-}
 </script>

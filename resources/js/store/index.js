@@ -1,31 +1,27 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
-import products from '@/store/modules/shop/products'
+// General
+import state from '@/store/modules/generals/states'
+import * as getters from '@/store/modules/generals/getters'
+import * as actions from '@/store/modules/generals/actions'
+import mutations from '@/store/modules/generals/mutations'
+
+// Modulos
+import products from '@/store/modules/products/index'
 import shoppingCart from '@/store/modules/shop/shopping-cart'
-import * as actions from '@/store/modules/shop/actions'
-import * as getters from '@/store/modules/shop/getters'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-    state: {
-        barColor: 'rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)',
-        barImage: 'https://demos.creative-tim.com/material-dashboard/assets/img/sidebar-1.jpg',
-        drawer: null,
-    },
-    mutations: {
-        SET_BAR_IMAGE (state, payload) {
-            state.barImage = payload
-        },
-        SET_DRAWER (state, payload) {
-            state.drawer = payload
-        },
-    },
-    actions,
+    state,
     getters,
+    actions,
+    mutations,
     modules: {
         products,
         shoppingCart
     },
+    plugins: [createPersistedState()]
 })
