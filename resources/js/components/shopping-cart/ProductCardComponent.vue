@@ -13,7 +13,7 @@
         </v-img>
 
         <v-card-text class="pb-0 fade-out product-card-description">
-            {{product.description}}
+            {{ product.description | 'shorten-text' }}
         </v-card-text>
 
         <v-card-text class="pb-0 center-text">

@@ -111,6 +111,23 @@ class Product extends Model
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['category_name'];
+
+    /**
+     * Get the administrator flag for the user.
+     *
+     * @return bool
+     */
+    public function getCategoryNameAttribute()
+    {
+        return $this->category->category;
+    }
+
+    /**
      * Get the route key for the model.
      *
      * @return string
@@ -133,7 +150,7 @@ class Product extends Model
      **/
     public function category()
     {
-        return $this->belongsTo(\App\Models\Products\Category::class, 'category_id');
+        return $this->belongsTo(\App\Models\Products\Config\Category::class, 'category_id');
     }
 
     /**

@@ -7,7 +7,7 @@
                         <v-img :src="product.images[0].url" :aspect-ratio="16/9">
                             <v-expand-transition>
                                 <div v-if="hover" class="d-flex transition-fast-in-fast-out orange draken-2 display-3 v-card--reveal display3 black--text" style="height: 100%;">
-                                    ${{product.inventories[0].price}}
+                                    ${{ product.inventories[0].price }}
                                 </div>
                             </v-expand-transition>
                         </v-img>
@@ -17,7 +17,7 @@
                                 <v-icon>mdi-cart</v-icon>
                             </v-btn>
 
-                            <small class="font-weight-light grey--text mb-2">{{product.category}}</small>
+                            <small class="font-weight-light grey--text mb-2">{{product.category_name}}</small>
                             <p class="font-weight-light orange--text mb-2">{{product.product}}</p>
 
                             <!-- <div class="font-weight-light mb-2">{{product.description}}</div> -->
