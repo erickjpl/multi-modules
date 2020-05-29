@@ -10,7 +10,7 @@ import mutations from '@/store/modules/generals/mutations'
 
 // Modulos
 import products from '@/store/modules/products/index'
-import shoppingCart from '@/store/modules/shop/shopping-cart'
+import shoppingCart from '@/store/modules/shop/index'
 
 Vue.use(Vuex)
 

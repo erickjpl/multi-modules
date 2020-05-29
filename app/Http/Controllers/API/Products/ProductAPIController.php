@@ -60,7 +60,11 @@ class ProductAPIController extends AppBaseController
     public function index(Request $request)
     {
         try {
-            $products = $this->productRepository->relations( $request );
+            $products = $this->productRepository->allProducts(
+                $request->except(['skip', 'limit']),
+                $request->get('skip'),
+                $request->get('limit')
+            );
            
             if ( ! empty($products) ) 
                 return response()->json($products->toArray(), 200);

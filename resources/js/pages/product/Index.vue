@@ -5,6 +5,15 @@
                 <span>
                     <v-flex wrap>
                         <product-list-component :products=products />
+
+                        <div class="text-center text-xs-center pt-2">
+                            <v-pagination 
+                                v-model="paginate.current_page" 
+                                :length="pages" 
+                                @input="page"
+                                circle 
+                            />
+                        </div>
                     </v-flex>
 
                     <!-- <v-flex order-xs1 order-sm2 >
@@ -18,11 +27,23 @@
 
 <script>
     import '@/plugins/global/product'
-    import { mapGetters } from 'vuex'
+    import { mapGetters, mapActions } from 'vuex'
 
     export default {
         computed: {
-            ...mapGetters('products', ['products'])
+            ...mapGetters('products', ['products', 'paginate']),
+            pages () {
+                return this.paginate 
+                    ? Math.ceil( this.paginate.total / this.paginate.per_page ) 
+                    : 0
+            }
+        },
+        methods: {
+            ...mapActions('products', ['getAllProducts']),
+            page(page) {
+                console.info( 'page' )
+                this.getAllProducts({ page: page })
+            }
         }
     }
 </script>

@@ -1,11 +1,13 @@
+'use strict'
+
 import Repository from '@/repositories/config/Repository'
 
 export default class RepositoryFactory {
 
     constructor(url) { this.url = url }
 
-    getAll() {
-        return Repository.get( this.url )
+    getAll(q) {
+        return Repository.get( this.url, { params: q } )
             .then(  (response)  => Promise.resolve(response) )
             .catch( (error)     => Promise.reject(error.response) )
     }

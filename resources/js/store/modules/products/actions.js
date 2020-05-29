@@ -1,11 +1,12 @@
 import { ProductRepository } from '@/repositories/ProductRepository'
 
 const actions = {
-    async getAllProducts({commit}) {
-        await ProductRepository.getAll()
+    async getAllProducts({commit}, q) {
+        await ProductRepository.getAll(q)
             .then( response => {
                 let paginate = {
                     current_page: response.data.current_page,
+                    per_page: response.data.per_page,
                     first_page_url: response.data.first_page_url,
                     last_page_url: response.data.last_page_url,
                     next_page_url: response.data.next_page_url,
@@ -20,7 +21,7 @@ const actions = {
             .catch( error   => commit( 'ERROR', error ))
     },
     addItemToCart({ commit }, item) {
-        if (item.inventory > 0)
+        if (item.inventories[0].quantity > 0)
             commit( 'ADD_TO_CART', item.id );
     }
 }

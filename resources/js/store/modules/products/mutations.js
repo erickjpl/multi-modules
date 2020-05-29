@@ -5,8 +5,10 @@ const mutations = {
     PRODUCTS_PAGINATE( state, products ) {
         state.paginate = products
     },
+
+    /** RESTAR CUANDO SE REALICE LA COMPRA */
     ADD_TO_CART( state, id ) {
-        state.items.find( p => p.id === id ).inventories.quantity--
+        state.items.find( p => p.id === id ).inventories[0].quantity--
     },  
 
     /* REVISAR */

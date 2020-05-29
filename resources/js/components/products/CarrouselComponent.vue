@@ -2,14 +2,17 @@
     <v-carousel cycle hide-delimiter-background show-arrows-on-hover height="250">
         <v-carousel-item v-for="(pluck, i) in products" :key="i">
             <!-- <v-sheet :color="colors[i]" height="100%"> -->
-                <hot-product-component :products=pluck />
+                <hot-product :products=pluck />
             <!-- </v-sheet> -->
         </v-carousel-item>
     </v-carousel>
 </template>
 
 <script>
+    import HotProduct from './HotProductComponent'
+
     export default {
+        components:{ HotProduct },
         props: {
             products: {
                 type: Array,

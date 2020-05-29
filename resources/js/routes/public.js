@@ -4,7 +4,7 @@ import ShoppingCart from '@/pages/shopping-cart/Index'
 
 import Basket from '@/pages/shopping-cart/Basket'
 import BasketCheckout from '@/pages/shopping-cart/BasketCheckout'
-import Products from '@/pages/shopping-cart/Index'
+import Products from '@/pages/product/Index'
 
 export default [
     {

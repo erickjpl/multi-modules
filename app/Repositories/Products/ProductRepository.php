@@ -42,32 +42,27 @@ class ProductRepository extends BaseRepository
     }
 
     /**
-     * Return relations
-     **/
-    public function relations( $request = null )
+     * Retrieve all records with given filter criteria
+     *
+     * @param array $search
+     * @param int|null $skip
+     * @param int|null $limit
+     * @param array $columns
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function allProducts($search = [], $skip = null, $limit = null, $columns = ['*'])
     {
-        if ( ! $request->all() ) {
-            return $this
-                ->model
-                ->withCount(['billingDetails as most_selled'])
-                ->with(['images', 'inventories' => function ($query) {
-                    $query->selectRaw('product_id,SUM(quantity) as quantity,price,promotion,discount')
-                        ->whereIn('status', ['in shop', 'available'])
-                        ->groupBy('product_id')
-                        ->orderBy('created_at', 'asc');
-                }])->paginate(100);
-        }
-            
-        return $this
-            ->model
-            ->where('category_id', $request->category_id)
-            ->withCount(['billingDetails as most_selled'])
-            // ->with(['inventories:product_id,quantity'])
-            ->with(['images', 'inventories' => function ($query) {
-                $query->selectRaw('product_id,SUM(quantity) as quantity,price,promotion,discount')
-                    ->whereIn('status', ['in shop', 'available'])
-                    ->groupBy('product_id')
-                    ->orderBy('created_at', 'asc');
-            }])->paginate(100);
+        $query = $this->allQuery($search, $skip, $limit);
+        
+        $query->withCount(['billingDetails as most_selled'])
+        ->with(['images', 'inventories' => function ($query) {
+            $query->selectRaw('product_id,SUM(quantity) as quantity,price,promotion,discount')
+                ->whereIn('status', ['in shop', 'available'])
+                ->groupBy('product_id')
+                ->orderBy('created_at', 'asc');
+        }])->get($columns);
+        
+        return $query->paginate(20);
     }
 }

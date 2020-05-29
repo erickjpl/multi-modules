@@ -13,7 +13,7 @@
         </v-img>
 
         <v-card-text class="pb-0 fade-out product-card-description">
-            {{ product.description | 'shorten-text' }}
+            {{ product.description | shorten-text }}
         </v-card-text>
 
         <v-card-text class="pb-0 center-text">
@@ -25,8 +25,8 @@
 
         <v-card-actions class="justify-center">
             <template v-if="product.inventories.length > 0">
-                <v-btn primary v-if="product.inventories[0].quantity > 0" @click.native="addItemToCart(product)">
-                    Add to Cart
+                <v-btn primary v-if="product.inventories[0].quantity > 0" 
+                    @click.native="addItemToCart(product)">Add to Cart
                 </v-btn>
 
                 <v-btn disabled v-if="product.inventories[0].quantity <= 0">

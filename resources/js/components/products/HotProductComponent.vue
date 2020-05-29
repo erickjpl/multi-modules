@@ -6,14 +6,27 @@
                     <v-card slot-scope="{hover}" class="mx-auto" color="gray lighten-4" height="250" min-width="200" max-width="250">
                         <v-img :src="product.images[0].url" :aspect-ratio="16/9">
                             <v-expand-transition>
-                                <div v-if="hover" class="d-flex transition-fast-in-fast-out orange draken-2 display-3 v-card--reveal display3 black--text" style="height: 100%;">
-                                    ${{ product.inventories[0].price }}
+                                <div v-if="hover" class="d-flex transition-fast-in-fast-out orange draken-2 display-2 v-card--reveal black--text" style="height: 100%;">
+                                    <template v-if="product.inventories.length > 0" ma-0 pa-0>
+                                        {{ product.inventories[0].price | money }}
+                                    </template>
+                                    <template v-else>
+                                        Agotado
+                                    </template>
                                 </div>
                             </v-expand-transition>
                         </v-img>
 
                         <v-card-text class="pt-4" style="position: relative;">
-                            <v-btn absolute color="orange" class="white--text" fab medium right top>
+                            <template v-if="product.inventories.length > 0">
+                                <v-btn absolute color="orange" class="white--text" 
+                                    fab medium right top v-if="product.inventories[0].quantity > 0" 
+                                    @click.native="addItemToCart(product)">
+                                    
+                                    <v-icon>mdi-cart</v-icon>
+                                </v-btn>
+                            </template>
+                            <v-btn absolute disabled class="white--text" fab medium right top v-else>
                                 <v-icon>mdi-cart</v-icon>
                             </v-btn>
 
@@ -30,12 +43,17 @@
 </template>
 
 <script>
-    export default {
+    import { mapActions } from 'vuex'
+   
+   export default {
         props: {
             products: {
                 type: Array,
 				required: true
             }
+        },
+        methods: {
+            ...mapActions('products', ['addItemToCart'])
         }
     }
 </script>
