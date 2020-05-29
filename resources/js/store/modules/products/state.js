@@ -1,7 +1,7 @@
 const state = {
     items: [],
     paginate: [],
-    error: ''
+    error: []
 }
 
 export default state

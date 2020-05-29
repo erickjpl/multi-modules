@@ -4,7 +4,7 @@ import ShoppingCart from '@/pages/shopping-cart/Index'
 
 import Basket from '@/pages/shopping-cart/Basket'
 import BasketCheckout from '@/pages/shopping-cart/BasketCheckout'
-import Example from '@/pages/shopping-cart/Example'
+import Products from '@/pages/shopping-cart/Index'
 
 export default [
     {
@@ -21,7 +21,7 @@ export default [
             {
                 path: 'cart',
                 name: 'cart',
-                component: Example,
+                component: Products,
             },
             {
                 path: 'shop',

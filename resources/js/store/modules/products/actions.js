@@ -18,6 +18,10 @@ const actions = {
                 commit( 'PRODUCTS_PAGINATE', paginate )
             })
             .catch( error   => commit( 'ERROR', error ))
+    },
+    addItemToCart({ commit }, item) {
+        if (item.inventory > 0)
+            commit( 'ADD_TO_CART', item.id );
     }
 }
 

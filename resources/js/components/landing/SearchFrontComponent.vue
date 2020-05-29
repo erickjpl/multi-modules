@@ -16,7 +16,7 @@
 </template>
 
 <script>
-    import Carrousel from '@/components/shopping-cart/CarrouselComponent'
+    import Carrousel from '@/components/products/CarrouselComponent'
     
     export default {
         components: {

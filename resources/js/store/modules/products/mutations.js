@@ -5,11 +5,11 @@ const mutations = {
     PRODUCTS_PAGINATE( state, products ) {
         state.paginate = products
     },
-    
-    /* REVISAR */
     ADD_TO_CART( state, id ) {
         state.items.find( p => p.id === id ).inventories.quantity--
     },  
+
+    /* REVISAR */
     REMOVE_FROM_CART( state, removedProduct ) {
         state.items.find( p => p.id === removedProduct.id ).inventory += removedProduct.quantity
     },
