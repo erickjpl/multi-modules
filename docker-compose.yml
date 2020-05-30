@@ -1,0 +1,56 @@
+version: "3.8"
+services:
+  app:
+    build:
+      args:
+        user: admin
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: shop
+    container_name: shop-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      - ./.cloud/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - shop
+
+  db:
+    image: mysql:latest
+    container_name: shop-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: root
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+      TZ: UTC
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./.cloud/mysql/mysql.cnf:/etc/mysql/my.cnf
+    networks:
+      - shop
+
+  nginx:
+    image: nginx:alpine
+    container_name: shop-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./.cloud/nginx/conf.d/:/etc/nginx/conf.d
+    networks:
+      - shop
+
+networks:
+  shop:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
