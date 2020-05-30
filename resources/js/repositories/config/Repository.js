@@ -2,7 +2,7 @@
 
 import axios from 'axios'
 
-const BASE_URL = process.env.MIX_APP_URL
+const BASE_URL = `${process.env.MIX_APP_URL}/api`
 
 const service = axios.create({
     headers: { 'Content-Type': 'application/json' },
