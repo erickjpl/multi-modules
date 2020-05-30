@@ -12,3 +12,6 @@ npm-debug.log
 yarn-error.log
 .vscode/
 /resources/model_schemas
+./composer.lock
+./package-lock.json
+/public/js/app.js
