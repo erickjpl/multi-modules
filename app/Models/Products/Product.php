@@ -124,7 +124,8 @@ class Product extends Model
      */
     public function getCategoryNameAttribute()
     {
-        return $this->category->category;
+        if ( $this->category != null )
+            return $this->category->category;
     }
 
     /**
