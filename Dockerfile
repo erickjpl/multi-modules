@@ -12,13 +12,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip \
-	build-essential \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    locales \
-    jpegoptim optipng pngquant gifsicle \
-    vim
+    unzip
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*

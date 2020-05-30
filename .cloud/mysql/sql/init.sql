@@ -4,12 +4,9 @@
 #
 # example: .env MYSQL_USER=appuser and needed db name is myshop_db
 #
+#    CREATE DATABASE IF NOT EXISTS `myshop_db` ;
+#    GRANT ALL ON `myshop_db`.* TO 'appuser'@'%' ;
 #
-
-CREATE DATABASE IF NOT EXISTS MYSQL_DATABASE;
-GRANT ALL ON MYSQL_USER.* TO MYSQL_USER@'%' IDENTIFIED WITH mysql_native_password BY MYSQL_PASSWORD;
-GRANT ALL ON MYSQL_DATABASE.* TO MYSQL_USER@'%';
-
 #
 # this sql script will auto run when the mysql container starts and the $DATA_PATH_HOST/mysql not found.
 #

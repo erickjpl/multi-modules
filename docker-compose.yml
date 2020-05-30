@@ -23,24 +23,24 @@ services:
       - shop
 
   db:
-    image: mysql:latest
+    image: mysql:5.7
     container_name: shop-db
     restart: unless-stopped
     tty: true
     ports:
-      - "3306:3306"
+      - '3306:3306'
+    expose:
+      - '3306'
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: root
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
-      TZ: UTC
+      MYSQL_ROOT_PASSWORD: admin
     volumes:
-      - dbdata:/var/lib/mysql
-      - ./.cloud/mysql/config/my.cnf:/etc/mysql/my.cnf
-      - ./.cloud/mysql/config.d:/docker-entrypoint-initdb.d
+      # - dbdata:/var/lib/mysql
+      # - ./.cloud/mysql/conf.d/my.cnf:/etc/mysql/my.cnf
+      # - ./.cloud/mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./.cloud/mysql/sql:/docker-entrypoint-initdb.d
     networks:
       - shop
 
@@ -63,5 +63,5 @@ networks:
     driver: bridge
 
 volumes:
-  dbdata:
+  db:
     driver: local
