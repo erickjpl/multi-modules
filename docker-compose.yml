@@ -39,7 +39,8 @@ services:
       TZ: UTC
     volumes:
       - dbdata:/var/lib/mysql
-      - ./.cloud/mysql/my.cnf:/etc/mysql/my.cnf
+      - ./.cloud/mysql/config/my.cnf:/etc/mysql/my.cnf
+      - ./.cloud/mysql/config.d:/docker-entrypoint-initdb.d
     networks:
       - shop
 
