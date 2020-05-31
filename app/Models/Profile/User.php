@@ -67,6 +67,9 @@ class User extends Authenticatable
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
+    const MAX_ATTEMPTS = 10;
+    const DECAY_MINUTES = 30;
+
 
     protected $dates = ['deleted_at'];
 
