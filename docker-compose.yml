@@ -1,0 +1,67 @@
+version: "3"
+
+services:
+  app:
+    build:
+      args:
+        user: ${USER}
+        uid: ${UID}
+      context: ./
+      dockerfile: Dockerfile
+    image: shop
+    container_name: shop-app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      - ./.cloud/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - shop
+
+  db:
+    image: mysql:5.7
+    container_name: shop-db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: admin
+    volumes:
+      # - dbdata:/var/lib/mysql
+      # - ./.cloud/mysql/conf.d/my.cnf:/etc/mysql/my.cnf
+      # - ./.cloud/mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./.cloud/mysql/sql:/docker-entrypoint-initdb.d
+    networks:
+      - shop
+
+  nginx:
+    image: nginx:alpine
+    container_name: shop-nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./:/var/www
+      - ./.cloud/nginx/conf.d/:/etc/nginx/conf.d
+    networks:
+      - shop
+
+networks:
+  shop:
+    driver: bridge
+
+volumes:
+  db:
+    driver: local
