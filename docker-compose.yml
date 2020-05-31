@@ -23,24 +23,25 @@ services:
       - shop
 
   db:
-    image: mysql:5.7
+    image: mysql:latest
+    command: 
+      --default-authentication-plugin=mysql_native_password
+      '--character-set-server=utf8mb4'
     container_name: shop-db
     restart: unless-stopped
     tty: true
     ports:
       - '3306:3306'
-    expose:
-      - '3306'
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: admin
+      SERVICE_TAGS: dev
+      SERVICE_NAME: db_mysql
     volumes:
-      # - dbdata:/var/lib/mysql
-      # - ./.cloud/mysql/conf.d/my.cnf:/etc/mysql/my.cnf
-      # - ./.cloud/mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
-      - ./.cloud/mysql/sql:/docker-entrypoint-initdb.d
+      - dbdata:/var/lib/mysql:cached
+      - ./.cloud/mysql/conf.d:/etc/mysql
     networks:
       - shop
 
@@ -63,5 +64,5 @@ networks:
     driver: bridge
 
 volumes:
-  db:
+  dbdata:
     driver: local
