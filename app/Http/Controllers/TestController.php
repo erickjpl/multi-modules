@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Products\Product;
 use App\Http\Resources\TestResource;
 use App\Http\Resources\TestCollection;
+use App\Http\Resources\Products\ProductCollection;
 
 class TestController extends Controller
 {
@@ -16,7 +17,7 @@ class TestController extends Controller
      */
     public function index()
     {
-        return TestCollection::make( Product::all() );
+        return ProductCollection::make( Product::paginate(10) );
     }
 
     /**

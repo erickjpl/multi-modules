@@ -151,7 +151,8 @@ class Product extends Model
      **/
     public function category()
     {
-        return $this->belongsTo(\App\Models\Products\Config\Category::class, 'category_id');
+        return $this->belongsTo(\App\Models\Products\Config\Category::class, 'category_id')
+            ->withDefault([ 'category' => 'no hay categoria' ]);
     }
 
     /**
