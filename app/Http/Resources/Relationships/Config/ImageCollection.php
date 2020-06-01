@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Resources\Products;
+namespace App\Http\Resources\Relationships\Config;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Http\Resources\Relationships\Config\ImageResource;
 
-class InventoryCollection extends ResourceCollection
+class ImageCollection extends ResourceCollection
 {
-    public $collects = InventoryResource::class;
-    
+    public $collects = ImageResource::class;
+
     /**
      * Transform the resource collection into an array.
      *

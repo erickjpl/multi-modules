@@ -1,29 +1,28 @@
 <?php
 
-namespace App\Http\Resources\Products;
+namespace Tests\Feature\Products;
 
-use App\Http\Resources\Config\ImageCollection;
-use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Inventories\InventoryCollection;
-use App\Http\Resources\Config\ImageRelationshipsCollection;
-use App\Http\Resources\Relationships\Config\ImageCollection as ImageExt;
-use App\Http\Resources\Relationships\Inventories\InventoryCollection As InventoryExt;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
-class ProductResource extends JsonResource
+class ProductTest extends TestCase
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function toArray($request)
-    {
-        $category = $this->category;
-        $images = $this->images;
-        $availableInventories = $this->availableInventories;
+    use RefreshDatabase;
 
-        return [
+     /**
+     * @test
+     */
+    public function test_create_product()
+    {
+        /* $this->withoutExceptionHandling();
+
+        $product = factory(Product::class)->create();
+
+        $response = $this->postJson(route('test.index'));
+
+        $response->assertApiResponse([
             'id' => (string) $this->getRouteKey(),
             'type' => 'products',
             'attributes' => [
@@ -57,6 +56,8 @@ class ProductResource extends JsonResource
             'links' => [
                 'self' => route('api.products.show', $this->getRouteKey())
             ]
-        ];
+        ]); */
+
+        $response->assertTrue(true);
     }
 }

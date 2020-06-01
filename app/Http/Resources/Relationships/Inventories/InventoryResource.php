@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Config;
+namespace App\Http\Resources\Relationships\Inventories;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ImageRelationshipsResource extends JsonResource
+class InventoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,7 @@ class ImageRelationshipsResource extends JsonResource
     {
         return [
             'id' => (string) $this->getRouteKey(),
-            'type' => 'images',
+            'type' => 'inventories',
         ];
     }
 }
