@@ -40,13 +40,13 @@ class ProductResource extends JsonResource
                     ImageRelationshipsCollection::make( $this->images )
                 ],
                 'inventories' => [
-                    InventoryCollection::make( $this->inventories )
+                    InventoryCollection::make( $this->availableInventories )
                 ]
             ],
             'included' => [
                 'categories' => CategoryResource::make( $this->category ),
                 'images' => ImageCollection::make( $this->images ),
-                'inventories' => InventoryExt::make( $this->inventories )
+                'inventories' => InventoryExt::make( $this->availableInventories )
             ],
             'links' => [
                 'self' => route('api.products.show', $this->getRouteKey())

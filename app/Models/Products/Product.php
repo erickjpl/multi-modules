@@ -170,4 +170,16 @@ class Product extends Model
     {
         return $this->hasMany(\App\Models\Products\Sales\Inventory::class, 'product_id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     **/
+    public function availableInventories()
+    {
+        return $this->hasMany(\App\Models\Products\Sales\Inventory::class, 'product_id')
+            ->selectRaw('id,SUM(quantity) as quantity,promotion,discount,price,status,observation')
+            ->whereIn('status', ['in shop', 'available'])
+            ->groupBy('product_id')
+            ->orderBy('created_at', 'asc');            
+    }
 }
