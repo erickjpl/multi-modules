@@ -12,13 +12,8 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-<<<<<<< HEAD
-package-lock.json
-composer.lock
-=======
 .vscode/
 /resources/model_schemas
 ./composer.lock
 ./package-lock.json
 /public/js/app.js
->>>>>>> e6ecc806551641caf4cfabdb6b11d1e02974eba3
