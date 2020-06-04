@@ -4,7 +4,7 @@ namespace App\Http\Resources\Products;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryResource extends JsonResource
+class BestSellerResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,13 +16,14 @@ class CategoryResource extends JsonResource
     {
         return [
             'id' => (string) $this->getRouteKey(),
-            'type' => 'categories',
+            'type' => 'products',
             'attributes' => [
                 'id' => $this->id,
-                'category' => $this->category
+                'product' => $this->product,
+                'most_selled' => $this->most_selled
             ],
             'links' => [
-                'self' => route('api.categories.show', $this->getRouteKey())
+                'self' => route('api.products.show', $this->getRouteKey())
             ]
         ];
     }

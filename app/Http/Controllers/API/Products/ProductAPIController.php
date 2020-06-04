@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\API\Products;
 
+use Response;
+use Illuminate\Http\Request;
+use App\Models\Products\Product;
+use App\Http\Controllers\AppBaseController;
+use App\Http\Resources\Error\ErrorResource;
+use App\Http\Resources\Products\ProductResource;
+use App\Repositories\Products\ProductRepository;
+use App\Http\Resources\Products\ProductCollection;
 use App\Http\Requests\API\Products\CreateProductAPIRequest;
 use App\Http\Requests\API\Products\UpdateProductAPIRequest;
-use App\Models\Products\Product;
-use App\Repositories\Products\ProductRepository;
-use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use Response;
+use App\Http\Controllers\API\Products\Config\ErrorAPIController;
 
 /**
  * Class ProductController
@@ -65,13 +69,24 @@ class ProductAPIController extends AppBaseController
                 $request->get('skip'),
                 $request->get('limit')
             );
-           
+
+            abort(500);
+
             if ( ! empty($products) ) 
-                return response()->json($products->toArray(), 200);
+                return ProductCollection::make( $products->paginate(20) );
 
             return response()->json(array('info' => 'No se encontraron datos.', 'status' => '204'));
-        } catch (Illuminate\Database\QueryException $e) {
-            return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
+        } catch (\Exception $e) {
+            $error = new ErrorAPIController($e);
+            return response()->json($error->response());
+
+            return response()->json(['errors' => array(
+                'title' => 'Error del sistema',
+                'code' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'status' => '500')]);
         }
     }
 
@@ -164,16 +179,10 @@ class ProductAPIController extends AppBaseController
      *      )
      * )
      */
-    public function show(Request $request, Product $product)
+    public function show(Product $product)
     {
         try {
-            /** @var Product $product */
-            $repository = $this->productRepository->relations($request)->find($product->id);
-            
-            if ( empty($repository) ) 
-                return response()->json(array('info' => 'Producto no encontrado.', 'status' => '204'));
-
-            return response()->json($repository->toArray(), 200);
+            return ProductResource::make( $product );
         } catch (Illuminate\Database\QueryException $e) {
             return response()->json(array('info' => 'Ha ocurrido un error con la base de datos'), 500);
         }

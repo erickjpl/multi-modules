@@ -4,10 +4,12 @@ namespace App\Http\Resources\Products;
 
 use App\Http\Resources\Config\ImageCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Categories\CategoryResource;
 use App\Http\Resources\Inventories\InventoryCollection;
 use App\Http\Resources\Config\ImageRelationshipsCollection;
-use App\Http\Resources\Relationships\Config\ImageCollection as ImageExt;
-use App\Http\Resources\Relationships\Inventories\InventoryCollection As InventoryExt;
+use App\Http\Resources\Relationships\Config\ImageCollection as ImageRelation;
+use App\Http\Resources\Relationships\Categories\CategoryResource as CategoryRelation;
+use App\Http\Resources\Relationships\Inventories\InventoryCollection As InventoryRelation;
 
 class ProductResource extends JsonResource
 {
@@ -19,10 +21,6 @@ class ProductResource extends JsonResource
      */
     public function toArray($request)
     {
-        $category = $this->category;
-        $images = $this->images;
-        $availableInventories = $this->availableInventories;
-
         return [
             'id' => (string) $this->getRouteKey(),
             'type' => 'products',
@@ -34,25 +32,19 @@ class ProductResource extends JsonResource
             ],
             'relationships' => [
                 'categories' => [
-                    'data' => [
-                        'id' => $category->getRouteKey(),
-                        'type' => 'categories',
-                    ],
-                    'links' => [
-                        'related' => route('api.categories.show', $category->getRouteKey())
-                    ]
+                    CategoryRelation::make( $this->category )
                 ],
                 'images' => [
-                    ImageExt::make( $images )
+                    ImageRelation::make( $this->images )
                 ],
                 'inventories' => [
-                    InventoryExt::make( $availableInventories )
+                    InventoryRelation::make( $this->availableInventories )
                 ]
             ],
             'included' => [
-                'categories' => CategoryResource::make( $category ),
-                'images' => ImageCollection::make( $images ),
-                'inventories' => InventoryCollection::make( $availableInventories )
+                'categories' => CategoryResource::make( $this->category ),
+                'images' => ImageCollection::make( $this->images ),
+                'inventories' => InventoryCollection::make( $this->availableInventories )
             ],
             'links' => [
                 'self' => route('api.products.show', $this->getRouteKey())

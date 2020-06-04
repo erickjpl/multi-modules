@@ -106,27 +106,25 @@ class Product extends Model
      *
      * @var array
      */
-    protected $hidden = [
-        'created_at', 'updated_at', 'deleted_at'
-    ];
+    protected $hidden = [];
 
     /**
      * The accessors to append to the model's array form.
      *
      * @var array
      */
-    protected $appends = ['category_name'];
+    # protected $appends = ['category_name'];
 
     /**
      * Get the administrator flag for the user.
      *
      * @return bool
      */
-    public function getCategoryNameAttribute()
+    /* public function getCategoryNameAttribute()
     {
         if ( $this->category != null )
             return $this->category->category;
-    }
+    } */
 
     /**
      * Get the route key for the model.
@@ -176,8 +174,8 @@ class Product extends Model
      **/
     public function availableInventories()
     {
-        return $this->hasMany(\App\Models\Products\Sales\Inventory::class, 'product_id')
-            ->selectRaw('id,SUM(quantity) as quantity,promotion,discount,price,status,observation')
+        return $this->inventories()
+            ->selectRaw('id,SUM(quantity) as quantity,promotion,discount,price,status,observation,product_id')
             ->whereIn('status', ['in shop', 'available'])
             ->groupBy('product_id')
             ->orderBy('created_at', 'asc');            

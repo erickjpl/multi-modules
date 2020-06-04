@@ -55,14 +55,20 @@ class ProductRepository extends BaseRepository
     {
         $query = $this->allQuery($search, $skip, $limit);
         
-        $query->withCount(['billingDetails as most_selled'])
-        ->with(['images', 'inventories' => function ($query) {
-            $query->selectRaw('product_id,SUM(quantity) as quantity,price,promotion,discount')
-                ->whereIn('status', ['in shop', 'available'])
-                ->groupBy('product_id')
-                ->orderBy('created_at', 'asc');
-        }])->get($columns);
+        $quesry = $this->getRelations($query)->get($columns);
         
-        return $query->paginate(20);
+        return $query;
+    }
+
+    public function getProducts($query)
+    {
+        // $quesry = $this->getRelations($query)->get();
+        
+        return $query;
+    }
+
+    public function getRelations($query) 
+    {
+        return $query->with(['category', 'images', 'availableInventories']);
     }
 }

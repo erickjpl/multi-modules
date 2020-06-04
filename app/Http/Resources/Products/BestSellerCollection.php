@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Products;
 
-use App\Http\Resources\TestResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class TestCollection extends ResourceCollection
+class BestSellerCollection extends ResourceCollection
 {
-    public $collects = TestResource::class;
+    public $collects = BestSellerResource::class;
 
     /**
      * Transform the resource collection into an array.
@@ -19,11 +18,11 @@ class TestCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection,
-            'links' => [
-                'self' => route('test.index')
-            ],
             'meta' => [
-                'products_count' => $this->collection->count()
+                'images_count' => $this->collection->count()
+            ],
+            'links' => [
+                'self' => route('api.products.index')
             ]
         ];
     }
