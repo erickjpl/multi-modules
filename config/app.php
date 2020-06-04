@@ -175,6 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        App\Providers\MyAppServiceProvider::class,
     ],
 
     /*
@@ -227,6 +228,26 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+    ],
+
+    'debug_blacklist' => [
+        '_ENV' => [
+            'APP_KEY',
+            'DB_DATABASE',
+            'DB_USERNAME',
+            'DB_PASSWORD'
+        ],
+
+        '_SERVER' => [
+            'APP_KEY',
+            'DB_DATABASE',
+            'DB_USERNAME',
+            'DB_PASSWORD'
+        ],
+
+        '_POST' => [
+            'password'
+        ]
     ],
 
 ];
