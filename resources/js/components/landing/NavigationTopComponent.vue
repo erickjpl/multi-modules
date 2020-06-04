@@ -8,9 +8,9 @@
 
         <v-btn text :to="{name: 'shop'}">Products Opc-2</v-btn>
 
-        <v-btn text :to="{name: 'basket'}">
+        <v-btn text @click.stop="setDrawer(true)">
             <v-badge left color="green">
-                <span slot="badge">5</span>
+                <span slot="badge"></span>
                 <v-icon>mdi-cart</v-icon> Carrito
             </v-badge>
         </v-btn>
@@ -18,9 +18,19 @@
 </template>
 
 <script>
-    export default {
-        data: () => ({
-
-        })
+    import { mapMutations, mapState } from 'vuex'
+export default {
+    data: () => ({
+    }),
+    computed: {
+        ...mapState([ 'cartModal' ])
+    },
+    methods: {
+        setDrawer(value) {
+            this.OPEN_CART_MODAL(value)
+        },
+        ...mapMutations({ setDrawer: 'OPEN_CART_MODAL' })
     }
+}
 </script>
+

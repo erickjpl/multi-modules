@@ -1,16 +1,8 @@
 <template>
     <v-app>
         <l-navigation-top-component />
-        <v-navigation-drawer
-
-            absolute
-            right
-            temporary
-            >
-                <h2>prueba</h2>
-        </v-navigation-drawer>
+        <navigation-drawer-cart />
         <l-search-front-component :hotProducts=productsHot />
-        <h2>{{ this.$store.state.shoppingCart.cartModal }}</h2>
         <v-content>
             <router-view></router-view>
         </v-content>
@@ -21,7 +13,8 @@
 
 <script>
     import '@/plugins/global/landing'
-    import { mapGetters, mapActions, mapState, mapMutations} from 'vuex'
+    import { mapGetters, mapActions} from 'vuex'
+    import NavigationDrawerCart from '../../components/shopping-cart/NavigationDrawerCart'
 
     export default {
         name: 'IndexLanding',
@@ -30,9 +23,9 @@
                 hotProducts: [],
             }
         },
+        components:{ NavigationDrawerCart },
         computed: {
-            ...mapGetters('products', ['productsHot']),
-            ...mapMutations('shoppingCart', ['OPEN_CART_MODAL'] ),
+            ...mapGetters('products', ['productsHot'])
         },
         created() {
             this.getAllProducts()

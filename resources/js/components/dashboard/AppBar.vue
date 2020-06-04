@@ -73,7 +73,7 @@
                                         link: true,
                                         ...this.$attrs,
                                     }
-                                }, 
+                                },
                                 this.$slots.default)
                             },
                         },
