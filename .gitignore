@@ -10,8 +10,10 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+package-json.lock
 .vscode/
 /resources/model_schemas
 ./composer.lock
 ./package-lock.json
 /public/js/app.js
+
